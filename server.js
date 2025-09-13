@@ -1217,7 +1217,7 @@ app.get('/', (req, res) => {
                 <div class="hidden md:flex space-x-8">
                     <a href="#features" class="hover:text-pink-500 transition">Features</a>
                     <a href="#earn" class="hover:text-pink-500 transition">Earn</a>
-                    <a href="#about" class="hover:text-pink-500 transition">About</a>
+                    <a href="https://t.me/paid_promo0x" class="hover:text-pink-500 transition">About</a>
                 </div>
                 <a href="https://t.me/zboxrobot" class="bg-pink-600 hover:bg-pink-700 text-white px-6 py-2 rounded-lg font-medium transition">
                     Launch Bot
@@ -1370,8 +1370,7 @@ app.get('/', (req, res) => {
         });
     </script>
 </body>
-</html>`);
-});
+</html>`);});
 
 app.get('/stats', async (req, res) => {
   try {
