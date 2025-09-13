@@ -1296,4 +1296,5 @@ app.get('/stats', async (req, res) => {
 app.listen(PORT, () => {
   console.log(`🌙 NightPass server running on port ${PORT}`);
   console.log(`📊 Ads enabled: ${AD_ENABLED}`);
+
 });
