@@ -1147,140 +1147,230 @@ app.use(bodyParser.json());
 app.use(express.static('public'));
 
 app.get('/', (req, res) => {
-  res.send(`
-    <!DOCTYPE html>
-    <html>
-    <head>
-      <title>NightPass Admin Panel</title>
-      <style>
-        body { 
-          font-family: Arial, sans-serif; 
-          text-align: center; 
-          margin-top: 50px; 
-          background: #1a1a1a;
-          color: #fff;
+  res.send(`<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZBOX - Next Generation Earning</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0a0f;
+            color: #e2e8f0;
+            overflow-x: hidden;
         }
-        h1 { color: #ff4d94; }
-        .config-form {
-          background: #2d2d2d;
-          padding: 20px;
-          border-radius: 10px;
-          margin: 20px auto;
-          max-width: 500px;
-          box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        .gradient-bg {
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
         }
-        input, select, textarea {
-          width: 100%;
-          padding: 10px;
-          margin: 10px 0;
-          border: 1px solid #444;
-          border-radius: 5px;
-          background: #333;
-          color: #fff;
+        .web3-gradient {
+            background: linear-gradient(90deg, #ff0080 0%, #7928ca 50%, #0070f3 100%);
         }
-        button {
-          background: #ff4d94;
-          color: white;
-          padding: 10px 20px;
-          border: none;
-          border-radius: 5px;
-          cursor: pointer;
-          margin: 5px;
+        .neon-border {
+            border: 1px solid rgba(255, 0, 128, 0.5);
+            box-shadow: 0 0 10px rgba(255, 0, 128, 0.3);
         }
-        .stats {
-          background: #2d2d2d;
-          padding: 20px;
-          border-radius: 10px;
-          margin: 20px auto;
-          max-width: 500px;
-          box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        .pulse {
+            animation: pulse 2s infinite;
         }
-      </style>
-    </head>
-    <body>
-      <h1>🌙 NightPass Admin Panel</h1>
-      
-      <div class="stats">
-        <h2>Statistics</h2>
-        <p>Total Users: <span id="userCount">Loading...</span></p>
-        <p>Active Users (30 days): <span id="activeUsers">Loading...</span></p>
-        <button onclick="loadStats()">Refresh Stats</button>
-      </div>
-      
-      <div class="config-form">
-        <h2>Configuration</h2>
-        <form action="/update-config" method="post">
-          <div>
-            <label>Ads Enabled:</label>
-            <select name="AD_ENABLED">
-              <option value="true" ${AD_ENABLED ? 'selected' : ''}>Yes</option>
-              <option value="false" ${!AD_ENABLED ? 'selected' : ''}>No</option>
-            </select>
-          </div>
-          
-          <div>
-            <label>Channel 1 ID:</label>
-            <input type="number" name="PRIVATE_CHANNEL_1_ID" value="${PRIVATE_CHANNEL_1_ID}">
-          </div>
-          
-          <div>
-            <label>Channel 2 ID:</label>
-            <input type="number" name="PRIVATE_CHANNEL_2_ID" value="${PRIVATE_CHANNEL_2_ID}">
-          </div>
-          
-          <div>
-            <label>Group Link:</label>
-            <input type="text" name="GROUP_LINK" value="${group}">
-          </div>
-          
-          <div>
-            <label>Group Link 1:</label>
-            <input type="text" name="GROUP_LINK1" value="${group1}">
-          </div>
-          
-          <div>
-            <label>EarnLinks API Token:</label>
-            <input type="text" name="EARNLINKS_API_TOKEN" value="${EARNLINKS_API_TOKEN || ''}">
-          </div>
-          
-          <div>
-            <label>EarnLinks Domain:</label>
-            <input type="text" name="EARNLINKS" value="${EARNLINKS}">
-          </div>
-          
-          <button type="submit">Update Configuration</button>
-        </form>
-      </div>
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        #particles-js {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+        .content {
+            position: relative;
+            z-index: 1;
+        }
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(255, 0, 128, 0.2);
+        }
+    </style>
+</head>
+<body class="gradient-bg min-h-screen">
+    <!-- Particles Background -->
+    <div id="particles-js"></div>
+    
+    <div class="content relative">
+        <!-- Navigation -->
+        <nav class="border-b border-gray-800 py-4">
+            <div class="container mx-auto px-4 flex justify-between items-center">
+                <div class="flex items-center">
+                    <div class="w-10 h-10 rounded-lg web3-gradient flex items-center justify-center mr-3">
+                        <span class="text-white font-bold">Z</span>
+                    </div>
+                    <span class="text-xl font-bold bg-clip-text text-transparent web3-gradient">ZBOX</span>
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="#features" class="hover:text-pink-500 transition">Features</a>
+                    <a href="#earn" class="hover:text-pink-500 transition">Earn</a>
+                    <a href="#about" class="hover:text-pink-500 transition">About</a>
+                </div>
+                <a href="https://t.me/zboxrobot" class="bg-pink-600 hover:bg-pink-700 text-white px-6 py-2 rounded-lg font-medium transition">
+                    Launch Bot
+                </a>
+            </div>
+        </nav>
 
-      <div class="config-form">
-        <h2>Broadcast Message</h2>
-        <form action="/broadcast" method="post">
-          <div>
-            <label>Message:</label>
-            <textarea name="message" rows="4" placeholder="Enter your broadcast message"></textarea>
-          </div>
-          <button type="submit">Send Broadcast</button>
-        </form>
-      </div>
+        <!-- Hero Section -->
+        <section class="py-20 px-4">
+            <div class="container mx-auto max-w-4xl text-center">
+                <div class="pulse inline-block mb-6">
+                    <span class="bg-pink-900 text-pink-300 text-sm font-semibold px-4 py-2 rounded-full">NEW VERSION COMING SOON</span>
+                </div>
+                <h1 class="text-5xl md:text-6xl font-bold mb-6">The Ultimate <span class="bg-clip-text text-transparent web3-gradient">Adult Experience</span> on Telegram</h1>
+                <p class="text-xl text-gray-400 mb-10 max-w-2xl mx-auto">
+                    ZBOX revolutionizes adult entertainment with blockchain technology, exclusive content, and real earning opportunities.
+                </p>
+                <div class="flex flex-col sm:flex-row justify-center gap-4">
+                    <a href="https://t.me/zboxrobot" class="bg-pink-600 hover:bg-pink-700 text-white px-8 py-4 rounded-lg font-medium text-lg transition">
+                        Start Earning Now
+                    </a>
+                    <a href="#features" class="border border-pink-500 text-pink-300 hover:bg-pink-950 px-8 py-4 rounded-lg font-medium text-lg transition">
+                        Explore Features
+                    </a>
+                </div>
+            </div>
+        </section>
 
-      <script>
-        async function loadStats() {
-          try {
-            const response = await fetch('/stats');
-            const data = await response.json();
-            document.getElementById('userCount').textContent = data.userCount || '0';
-            document.getElementById('activeUsers').textContent = data.activeUsers || '0';
-          } catch (error) {
-            console.error('Error loading stats:', error);
-          }
-        }
-        
-        // Load stats on page load
-        window.onload = loadStats;
-      </script>
-    </body>
-    </html>
-  `);
+        <!-- Earning Section -->
+        <section id="earn" class="py-16 px-4 bg-gray-900 bg-opacity-50">
+            <div class="container mx-auto max-w-5xl">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold mb-4">Earn <span class="text-green-400">$10</span> with Our New Web3 System</h2>
+                    <p class="text-gray-400 max-w-2xl mx-auto">The next version of ZBOX introduces revolutionary earning opportunities through blockchain technology.</p>
+                </div>
+                <div class="grid md:grid-cols-3 gap-8">
+                    <div class="bg-gray-800 bg-opacity-50 p-6 rounded-xl neon-border card-hover">
+                        <div class="w-12 h-12 rounded-full web3-gradient flex items-center justify-center mb-4">
+                            <span class="text-white text-2xl">1</span>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-2">Complete Tasks</h3>
+                        <p class="text-gray-400">Engage with premium content and complete simple tasks to earn rewards.</p>
+                    </div>
+                    <div class="bg-gray-800 bg-opacity-50 p-6 rounded-xl neon-border card-hover">
+                        <div class="w-12 h-12 rounded-full web3-gradient flex items-center justify-center mb-4">
+                            <span class="text-white text-2xl">2</span>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-2">Refer Friends</h3>
+                        <p class="text-gray-400">Invite friends and earn commissions from their activities on the platform.</p>
+                    </div>
+                    <div class="bg-gray-800 bg-opacity-50 p-6 rounded-xl neon-border card-hover">
+                        <div class="w-12 h-12 rounded-full web3-gradient flex items-center justify-center mb-4">
+                            <span class="text-white text-2xl">3</span>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-2">Withdraw Earnings</h3>
+                        <p class="text-gray-400">Cash out your earnings directly to your crypto wallet with no hassle.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section id="features" class="py-16 px-4">
+            <div class="container mx-auto max-w-5xl">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold mb-4">Premium <span class="text-purple-400">Features</span></h2>
+                    <p class="text-gray-400 max-w-2xl mx-auto">Experience the next generation of adult entertainment with ZBOX's exclusive features.</p>
+                </div>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="bg-gray-800 bg-opacity-50 p-6 rounded-xl neon-border card-hover">
+                        <h3 class="text-xl font-semibold mb-2">Exclusive Content</h3>
+                        <p class="text-gray-400">Access premium adult content curated for the most discerning tastes.</p>
+                    </div>
+                    <div class="bg-gray-800 bg-opacity-50 p-6 rounded-xl neon-border card-hover">
+                        <h3 class="text-xl font-semibold mb-2">Private Communities</h3>
+                        <p class="text-gray-400">Join exclusive communities of like-minded adults for intimate interactions.</p>
+                    </div>
+                    <div class="bg-gray-800 bg-opacity-50 p-6 rounded-xl neon-border card-hover">
+                        <h3 class="text-xl font-semibold mb-2">Web3 Integration</h3>
+                        <p class="text-gray-400">Leverage blockchain technology for secure, private transactions and earnings.</p>
+                    </div>
+                    <div class="bg-gray-800 bg-opacity-50 p-6 rounded-xl neon-border card-hover">
+                        <h3 class="text-xl font-semibold mb-2">AI Companions</h3>
+                        <p class="text-gray-400">Interact with AI-powered companions for personalized adult experiences.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="py-16 px-4">
+            <div class="container mx-auto max-w-3xl text-center bg-gray-800 bg-opacity-50 rounded-2xl p-10 neon-border">
+                <h2 class="text-3xl md:text-4xl font-bold mb-6">Ready to <span class="text-pink-400">Earn $10</span> with Our New Version?</h2>
+                <p class="text-gray-400 mb-8">Join thousands of users already enjoying ZBOX's premium adult content and earning opportunities.</p>
+                <a href="https://t.me/zboxrobot" class="bg-pink-600 hover:bg-pink-700 text-white px-8 py-4 rounded-lg font-medium text-lg inline-block transition">
+                    Get Started Now
+                </a>
+                <p class="text-gray-500 text-sm mt-4">support :: zboxvideo@proton.me 📬</p>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="py-8 px-4 border-t border-gray-800">
+            <div class="container mx-auto text-center">
+                <p class="text-gray-500">© 2023 ZBOX. All rights reserved. For adults only.</p>
+                <p class="text-gray-600 text-sm mt-2">Age verification required. Users must be 18+ to access content.</p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Particles.js -->
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script>
+        // Particles.js config
+        document.addEventListener('DOMContentLoaded', function() {
+            particlesJS('particles-js', {
+                particles: {
+                    number: { value: 80, density: { enable: true, value_area: 800 } },
+                    color: { value: "#ff0080" },
+                    shape: { type: "circle" },
+                    opacity: { value: 0.5, random: true },
+                    size: { value: 3, random: true },
+                    line_linked: {
+                        enable: true,
+                        distance: 150,
+                        color: "#7928ca",
+                        opacity: 0.4,
+                        width: 1
+                    },
+                    move: {
+                        enable: true,
+                        speed: 2,
+                        direction: "none",
+                        random: true,
+                        straight: false,
+                        out_mode: "out",
+                        bounce: false
+                    }
+                },
+                interactivity: {
+                    detect_on: "canvas",
+                    events: {
+                        onhover: { enable: true, mode: "grab" },
+                        onclick: { enable: true, mode: "push" },
+                        resize: true
+                    }
+                },
+                retina_detect: true
+            });
+        });
+    </script>
+</body>
+</html>`);
 });
 
 app.get('/stats', async (req, res) => {
@@ -1298,3 +1388,4 @@ app.listen(PORT, () => {
   console.log(`📊 Ads enabled: ${AD_ENABLED}`);
 
 });
+
